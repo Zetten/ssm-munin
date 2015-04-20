@@ -12,6 +12,12 @@ class munin::params::node {
   $plugins        = {}
   $service_ensure = ''
   $export_node    = 'enabled'
+  $log_file       = 'munin-node.log'
+  $log_destination = 'file'
+  $syslog_logsock  = ''
+  $syslog_ident    = ''
+  $syslog_logopt   = ''
+  $syslog_facility = ''
 
   case $::osfamily {
     'RedHat': {
