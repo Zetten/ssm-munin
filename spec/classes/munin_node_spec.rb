@@ -67,6 +67,35 @@ describe 'munin::node' do
         end
       end
 
+      context 'logging to syslog' do
+        context 'defaults' do
+          let(:params) do
+            { log_destination: 'syslog' }
+          end
+          it{ should compile.with_all_deps }
+          it do
+            should contain_file(munin_node_conf)
+                    .with_content(/log_file\s+Sys::Syslog/)
+          end
+        end
+      end
+
+      context 'with syslog options' do
+        let(:params) do
+          { log_destination: 'syslog',
+            syslog_ident: 'munin-granbusk',
+            syslog_facility: 'user1',
+          }
+        end
+        it{ should compile.with_all_deps }
+        it do
+          should contain_file(munin_node_conf)
+                  .with_content(/log_file\s+Sys::Syslog/)
+                  .with_content(/syslog_ident\s+"munin-granbusk"/)
+                  .with_content(/syslog_facility\s+user1/)
+        end
+      end
+
     end
   end
 
