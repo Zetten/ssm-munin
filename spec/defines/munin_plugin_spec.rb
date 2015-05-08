@@ -13,10 +13,13 @@ describe 'munin::plugin', :type => 'define' do
       case facts[:osfamily]
       when 'Solaris'
         conf_dir = '/opt/local/etc/munin'
+        share_dir = '/opt/local/share'
       when 'FreeBSD'
         conf_dir = '/usr/local/etc/munin'
+        share_dir = '/usr/local/share'
       else
         conf_dir = '/etc/munin'
+        share_dir = '/usr/share'
       end
 
       context 'with no parameters' do
@@ -35,7 +38,7 @@ describe 'munin::plugin', :type => 'define' do
         it do
           should contain_file("#{conf_dir}/plugins/testplugin")
                   .with_ensure('link')
-                  .with_target('/usr/share/munin/plugins/testplugin')
+                  .with_target("#{share_dir}/munin/plugins/testplugin")
         end
         it do
           should contain_file("#{conf_dir}/plugin-conf.d/testplugin.conf")
@@ -52,7 +55,7 @@ describe 'munin::plugin', :type => 'define' do
         it do
           should contain_file("#{conf_dir}/plugins/test_foo")
                   .with_ensure('link')
-                  .with_target('/usr/share/munin/plugins/test_')
+                  .with_target("#{share_dir}/munin/plugins/test_")
         end
         it do
           should contain_file("#{conf_dir}/plugin-conf.d/test_foo.conf")

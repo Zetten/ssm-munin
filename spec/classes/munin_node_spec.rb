@@ -14,18 +14,18 @@ describe 'munin::node' do
 
       case facts[:osfamily]
       when 'Solaris'
+        conf_dir = '/opt/local/etc/munin'
         munin_node_service = 'smf:/munin-node'
-        munin_node_conf    = '/opt/local/etc/munin/munin-node.conf'
       when 'FreeBSD'
-        munin_node_conf    = '/usr/local/etc/munin/munin-node.conf'
+        conf_dir = '/usr/local/etc/munin'
         munin_node_service = 'munin-node'
       else
+        conf_dir  = '/etc/munin'
         munin_node_service = 'munin-node'
-        munin_node_conf = '/etc/munin/munin-node.conf'
       end
 
       it { should contain_service(munin_node_service) }
-      it { should contain_file(munin_node_conf) }
+      it { should contain_file("#{conf_dir}/munin-node.conf") }
 
 
       context 'acl with ipv4 and ipv6 addresses' do
@@ -39,7 +39,7 @@ describe 'munin::node' do
         end
         it { should compile.with_all_deps }
         it do
-          should contain_file('/etc/munin/munin-node.conf')
+          should contain_file("#{conf_dir}/munin-node.conf")
                   .with_content(/^cidr_allow 192.0.2.0\/25$/)
                   .with_content(/^cidr_allow 2001:db8:2::\/64$/)
                   .with_content(/^allow \^192\\.0\\.2\\.129\$$/)
@@ -51,7 +51,7 @@ describe 'munin::node' do
       context 'with host_name unset' do
         it { should compile.with_all_deps }
         it do
-          should contain_file('/etc/munin/munin-node.conf')
+          should contain_file("#{conf_dir}/munin-node.conf")
                   .with_content(/host_name\s+foo.example.com/)
         end
       end
@@ -62,7 +62,7 @@ describe 'munin::node' do
         end
         it { should compile.with_all_deps }
         it do
-          should contain_file('/etc/munin/munin-node.conf')
+          should contain_file("#{conf_dir}/munin-node.conf")
                   .with_content(/host_name\s+something.example.com/)
         end
       end

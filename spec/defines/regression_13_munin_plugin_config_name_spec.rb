@@ -9,13 +9,22 @@ describe 'munin::plugin' do
         facts
       end
 
+      case facts[:osfamily]
+      when 'Solaris'
+        conf_dir = '/opt/local/etc/munin'
+      when 'FreeBSD'
+        conf_dir = '/usr/local/etc/munin'
+      else
+        conf_dir = '/etc/munin'
+      end
+
       context 'with config_label unset, label should be set to title' do
         let(:params) do
           { config: ['env.foo bar'] }
         end
 
         it do
-          should contain_file('/etc/munin/plugin-conf.d/testplugin.conf')
+          should contain_file("#{conf_dir}/plugin-conf.d/testplugin.conf")
                   .with_content(/^\[testplugin\]$/)
         end
       end
@@ -26,7 +35,7 @@ describe 'munin::plugin' do
             config_label: 'foo_' }
         end
         it do
-          should contain_file('/etc/munin/plugin-conf.d/testplugin.conf')
+          should contain_file("#{conf_dir}/plugin-conf.d/testplugin.conf")
                   .with_content(/^\[foo_\]$/)
         end
       end
