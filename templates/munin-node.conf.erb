@@ -24,7 +24,18 @@
 
 host_name  <%= @host_name %>
 log_level  4
+<% case @log_destination -%>
+<% when 'syslog' -%>
+log_file   Sys::Syslog
+<%     if @syslog_ident -%>
+syslog_ident "<%= @syslog_ident %>"
+<%     end -%>
+<%     if @syslog_facility -%>
+syslog_facility <%= @syslog_facility %>
+<%     end -%>
+<% else -%>
 log_file   <%= @log_file %>
+<% end -%>
 port       4949
 pid_file   /var/run/munin/munin-node.pid
 background 1
