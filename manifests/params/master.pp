@@ -21,6 +21,9 @@ class munin::params::master {
     'RedHat': {
       $config_root = '/etc/munin'
     }
+    'FreeBSD': {
+      $config_root = '/usr/local/etc/munin'
+    }
     'Solaris': {
       $config_root = '/opt/local/etc/munin'
     }
